@@ -24,25 +24,26 @@ namespace devBlog.Pages.BlogPosts
             _userManager = userManager;
         }
 
-        public SelectList Tags { get; set; } = default!;
 
         public IActionResult OnGet()
         {
-            Tags = new SelectList(_context.Tag, nameof(Tag.TagID), nameof(Tag.Name));
+            Tags = _context.Tag.ToList();
             return Page();
         }
 
         [BindProperty]
         public BlogPost BlogPost { get; set; } = default!;
-
         [BindProperty]
-        public List<Guid> SelectedTagIDs { get; set; } = new List<Guid>();
+        public List<Guid> SelectedTags { get; set; } = new List<Guid>();
+
+        public List<Tag> Tags { get; set; } = new List<Tag>();
+
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                Tags = new SelectList(_context.Tag, nameof(Tag.TagID), nameof(Tag.Name));
+                Tags = _context.Tag.ToList();
                 return Page();
             }
 
@@ -54,21 +55,13 @@ namespace devBlog.Pages.BlogPosts
             }
             BlogPost.AuthorID = Guid.Parse(user);
 
+            foreach (var tagId in SelectedTags)
+            {
+                BlogPost.BlogPostTags.Add(new BlogPostTag { BlogPostID = BlogPost.BlogPostID, TagID = tagId });
+            }
+
             _context.BlogPost.Add(BlogPost);
             await _context.SaveChangesAsync();
-
-            if (SelectedTagIDs.Any())
-            {
-                foreach (var tagId in SelectedTagIDs)
-                {
-                    _context.BlogPostTag.Add(new BlogPostTag
-                    {
-                        BlogPostID = BlogPost.BlogPostID,
-                        TagID = tagId
-                    });
-                }
-                await _context.SaveChangesAsync();
-            }
 
             return RedirectToPage("./Index");
         }

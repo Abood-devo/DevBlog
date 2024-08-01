@@ -41,14 +41,30 @@
                     </label>
                 </div>
                 <div class="form-group">
+                    <label class="control-label">Tags</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="tagsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Modify Tags
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="tagsDropdown">
+                            @foreach (var tag in Model.AvailableTags)
+                            {
+                                var tagGuid = Guid.Parse(tag.Value.ToString());
+                                <li>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="tag_@tag.Value" name="SelectedTagIds" value="@tag.Value"
+                                        @(Model.SelectedTagIds.Contains(tagGuid) ? "checked" : "") />
+                                        <label class="form-check-label" for="tag_@tag.Value">@tag.Text</label>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label asp-for="BlogPost.Author" class="control-label"></label>
                     <input asp-for="BlogPost.Author" class="form-control" />
                     <span asp-validation-for="BlogPost.Author" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BlogPost.TopicID" class="control-label"></label>
-                    <input asp-for="BlogPost.TopicID" class="form-control" />
-                    <span asp-validation-for="BlogPost.TopicID" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />

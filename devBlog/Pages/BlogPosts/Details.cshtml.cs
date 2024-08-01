@@ -25,7 +25,8 @@ namespace devBlog.Pages.BlogPosts
         }
 
         public BlogPost BlogPost { get; set; } = default!;
-        public Guid CurrentUserId { get; set; }
+		public List<Tag> Tags { get; set; } = new List<Tag>();
+		public Guid CurrentUserId { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -35,7 +36,12 @@ namespace devBlog.Pages.BlogPosts
                 return NotFound();
             }
 
-            var blogpost = await _context.BlogPost.FirstOrDefaultAsync(m => m.BlogPostID == id);
+			var blogpost = await _context.BlogPost
+				.Include(bp => bp.BlogPostTags)
+				.ThenInclude(bpt => bpt.Tag)
+				.FirstOrDefaultAsync(m => m.BlogPostID == id);
+
+			//var blogpost = await _context.BlogPost.FirstOrDefaultAsync(m => m.BlogPostID == id);
             if (blogpost == null)
             {
                 return NotFound();
@@ -43,8 +49,12 @@ namespace devBlog.Pages.BlogPosts
             else
             {
                 BlogPost = blogpost;
+				Tags = BlogPost.BlogPostTags.Select(bpt => bpt.Tag).ToList();
 				var userId = _userManager.GetUserId(User);
-                CurrentUserId = Guid.Parse(userId);
+				if (userId != null)
+				{
+					CurrentUserId = Guid.Parse(userId);
+				}
             }
             return Page();
         }

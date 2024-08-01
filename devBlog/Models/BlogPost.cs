@@ -21,8 +21,6 @@ namespace devBlog.Models
         public DateTime LastModifiedDate { get; set; }
         public string Author { get; set; }
         public Guid AuthorID { get; set; }
-        public Guid TopicID { get; set; }
-
         public ICollection<BlogPostTag> BlogPostTags { get; set; } = new List<BlogPostTag>();
     }
 }

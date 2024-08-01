@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using devBlog.Data;
 
@@ -11,9 +12,11 @@ using devBlog.Data;
 namespace devBlog.Migrations
 {
     [DbContext(typeof(devBlogContext))]
-    partial class devBlogContextModelSnapshot : ModelSnapshot
+    [Migration("20240801065156_SeedTags")]
+    partial class SeedTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,6 +66,9 @@ namespace devBlog.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<Guid>("TopicID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("BlogPostID");
 
                     b.ToTable("BlogPost");
@@ -101,137 +107,137 @@ namespace devBlog.Migrations
                     b.HasData(
                         new
                         {
-                            TagID = new Guid("67f3804b-2e4c-4d4c-bc65-2e68a6d59fd4"),
+                            TagID = new Guid("e6eafb78-2d3d-488c-8ff6-41512fcf3b4b"),
                             Name = "Development"
                         },
                         new
                         {
-                            TagID = new Guid("256a4262-6e8c-48bf-b417-4aa0860c9488"),
+                            TagID = new Guid("7ad686fb-6326-4891-a2a4-6b4cc6243960"),
                             Name = "Web Development"
                         },
                         new
                         {
-                            TagID = new Guid("ea87cc48-ca65-496f-b0e2-d244589fda1b"),
+                            TagID = new Guid("1794de33-50c8-4a14-b4bb-a758e2ac2528"),
                             Name = "CSS"
                         },
                         new
                         {
-                            TagID = new Guid("47400c8d-4c7e-4df3-ba1d-53b563670a3b"),
+                            TagID = new Guid("72d4c9e8-bc49-4f4f-b393-f78a734bdbad"),
                             Name = "JavaScript"
                         },
                         new
                         {
-                            TagID = new Guid("26f0f375-680e-4a26-88c6-7b1696d2b7a6"),
+                            TagID = new Guid("91713744-ee9b-4887-8160-6bee49446863"),
                             Name = "Angular"
                         },
                         new
                         {
-                            TagID = new Guid("47683a36-e952-4a75-90dc-f208f6c5cb7c"),
+                            TagID = new Guid("d2c40fae-ac15-4945-8762-d5c3e8bcd632"),
                             Name = "PHP"
                         },
                         new
                         {
-                            TagID = new Guid("342d319f-5007-454c-b745-edc991a15dbd"),
+                            TagID = new Guid("ddb5da94-1d04-4de3-81b0-25ce759b364d"),
                             Name = "HTML"
                         },
                         new
                         {
-                            TagID = new Guid("d596f6a0-a3f3-4cce-9492-a0386306d39f"),
+                            TagID = new Guid("aea4ae6a-823c-4517-a2ca-3b7a1dca6d73"),
                             Name = "React"
                         },
                         new
                         {
-                            TagID = new Guid("ed227003-fc98-4683-becc-5719b4174f30"),
+                            TagID = new Guid("ec24b02f-98b6-42a5-aa58-9bbebf53f143"),
                             Name = "Data Science"
                         },
                         new
                         {
-                            TagID = new Guid("443106b3-7201-4234-982e-b1b5ba940e5d"),
+                            TagID = new Guid("11243338-a9ed-46f8-9a7a-bd8e889491db"),
                             Name = "Mobile Development"
                         },
                         new
                         {
-                            TagID = new Guid("3d54b292-f4ae-4c7b-a2c5-cdd474dc0be0"),
+                            TagID = new Guid("b9cffb4d-52e7-4a74-ab8e-d34fa3d6a380"),
                             Name = "Programming Language"
                         },
                         new
                         {
-                            TagID = new Guid("1abcf16d-6e29-4362-a393-235ac76a6bd6"),
+                            TagID = new Guid("d7036da9-1e71-4a80-9580-d57ab6e56c8b"),
                             Name = "Software Testing"
                         },
                         new
                         {
-                            TagID = new Guid("b8455130-b325-4656-80a6-5be15c13d74e"),
+                            TagID = new Guid("7a3473bd-1ae1-4e95-ab81-fc6e3361ce4b"),
                             Name = "Software Engineering"
                         },
                         new
                         {
-                            TagID = new Guid("f56bb2e2-f338-4111-88ef-4ceda922711e"),
+                            TagID = new Guid("8f7c4933-418d-4822-bab5-13a69703b66d"),
                             Name = "Software Development Tools"
                         },
                         new
                         {
-                            TagID = new Guid("4dee430c-a677-4106-a783-1e75f5677c31"),
+                            TagID = new Guid("98b20f22-1948-4102-bd3b-06af09b2926e"),
                             Name = "Cybersecurity"
                         },
                         new
                         {
-                            TagID = new Guid("386b6650-79a7-44ce-a9b8-74825734500d"),
+                            TagID = new Guid("bd8c477f-de79-40d7-9813-fcb02c50a901"),
                             Name = "Network Security"
                         },
                         new
                         {
-                            TagID = new Guid("a9e689a4-975c-413f-84c2-dd0a25ccb6af"),
+                            TagID = new Guid("5f4ec4a1-fedc-474d-b7cf-1697286e8154"),
                             Name = "Application Security"
                         },
                         new
                         {
-                            TagID = new Guid("87181401-d0df-4e62-a701-4dcd44ed03ad"),
+                            TagID = new Guid("23d770ef-eb4b-41e3-a7e8-53963d2ce31b"),
                             Name = "Data Privacy"
                         },
                         new
                         {
-                            TagID = new Guid("b87a8480-cc91-4e2d-8ff9-9f4a77512289"),
+                            TagID = new Guid("b8baaf97-e783-4d35-936d-20ed9fdbd1e0"),
                             Name = "Incident Response"
                         },
                         new
                         {
-                            TagID = new Guid("13086d29-1cea-4d01-8b4e-9ab46c3bc4cf"),
+                            TagID = new Guid("3487b5fd-230b-47c9-b3e4-0275f3afc74b"),
                             Name = "Security Tools"
                         },
                         new
                         {
-                            TagID = new Guid("6f10ed9d-42df-4398-ad13-a29acdb7fc01"),
+                            TagID = new Guid("ed218458-b1da-45e1-a2c6-2c13ea272d9d"),
                             Name = "AI / ML"
                         },
                         new
                         {
-                            TagID = new Guid("9b05aeea-cc50-49f6-9daf-1b883a32e9df"),
+                            TagID = new Guid("bb29cca1-558e-413c-b49f-f13dcbddf8c7"),
                             Name = "Machine Learning Algorithms"
                         },
                         new
                         {
-                            TagID = new Guid("59b44982-8a8d-43fa-a171-ae64bcafd1ae"),
+                            TagID = new Guid("9034ea1f-bf09-4aa3-a406-ffe7ed6c7b57"),
                             Name = "Deep Learning"
                         },
                         new
                         {
-                            TagID = new Guid("03319be9-e0c3-4e0f-8694-b06269b2a3bd"),
+                            TagID = new Guid("0e4b41d6-1f18-42c0-be97-a36978d07cb7"),
                             Name = "AI Applications"
                         },
                         new
                         {
-                            TagID = new Guid("8c937d06-3f61-43e0-8f65-3b283f430cef"),
+                            TagID = new Guid("4d582a53-68c2-4697-b7b1-13883ee332ee"),
                             Name = "Ethics in AI"
                         },
                         new
                         {
-                            TagID = new Guid("c533d844-a66f-4a4f-97d8-d7275b5198dc"),
+                            TagID = new Guid("cfbdc79c-5b18-4ead-8e0f-601d833adb30"),
                             Name = "Cloud Computing"
                         },
                         new
                         {
-                            TagID = new Guid("93d5f149-a985-42de-8121-a78953e962b6"),
+                            TagID = new Guid("87488ca6-8e26-4ffa-ae02-89c13f3c6a18"),
                             Name = "Tech Industry News"
                         });
                 });

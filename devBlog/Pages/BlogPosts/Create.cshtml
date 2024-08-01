@@ -45,21 +45,26 @@
                     <input asp-for="BlogPost.Author" class="form-control" />
                     <span asp-validation-for="BlogPost.Author" class="text-danger"></span>
                 </div>
-                @* Add other BlogPost fields here *@
                 <div class="form-group">
-                    <label for="SelectedTags">Tags</label>
-                    <select id="SelectedTags" name="SelectedTagIDs" class="form-control" multiple="multiple">
-                        @foreach (var tag in Model.Tags)
-                        {
-                            <option value="@tag.Value">@tag.Text</option>
-                        }
-                    </select>
-                    <span asp-validation-for="SelectedTagIDs" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BlogPost.TopicID" class="control-label"></label>
-                    <input asp-for="BlogPost.TopicID" class="form-control" />
-                    <span asp-validation-for="BlogPost.TopicID" class="text-danger"></span>
+                    <label class="control-label">Tags</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="tagsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Tags
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="tagsDropdown">
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <li>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="@tag.TagID" id="tag_@tag.TagID" name="SelectedTags">
+                                        <label class="form-check-label" for="tag_@tag.TagID">
+                                            @tag.Name
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />

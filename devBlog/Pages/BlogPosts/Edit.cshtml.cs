@@ -27,15 +27,19 @@ namespace devBlog.Pages.BlogPosts
 
         [BindProperty]
         public BlogPost BlogPost { get; set; } = default!;
-
+        
+        // Additional properties for tags
+        public SelectList AvailableTags { get; set; } = default!;
+        [BindProperty]
+        public List<Guid> SelectedTagIds { get; set; } = new List<Guid>();
+        
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var blogpost =  await _context.BlogPost.FirstOrDefaultAsync(m => m.BlogPostID == id);
+            
             var user = _userManager.GetUserId(User);
             if (user == null)
             {
@@ -43,6 +47,10 @@ namespace devBlog.Pages.BlogPosts
             }
             var userid = Guid.Parse(user);
 
+            var blogpost = await _context.BlogPost
+                .Include(bp => bp.BlogPostTags) // Include BlogPostTags to access related tags
+                .ThenInclude(bt => bt.Tag)
+                .FirstOrDefaultAsync(m => m.BlogPostID == id);
             if (blogpost == null)
             {
                 return NotFound();
@@ -53,6 +61,10 @@ namespace devBlog.Pages.BlogPosts
                 return Redirect("/blogposts/Create");
             }
             BlogPost = blogpost;
+
+            // Populate AvailableTags and SelectedTagIds
+            AvailableTags = new SelectList(await _context.Tag.ToListAsync(), "TagID", "Name");
+            SelectedTagIds = blogpost.BlogPostTags.Select(bt => bt.TagID).ToList();
             return Page();
         }
 
@@ -75,6 +87,27 @@ namespace devBlog.Pages.BlogPosts
 
 
             _context.Attach(BlogPost).State = EntityState.Modified;
+
+            // Handle the tags
+            var existingTags = _context.BlogPostTag
+                .Where(bpt => bpt.BlogPostID == BlogPost.BlogPostID)
+                .ToList();
+
+            var newTags = SelectedTagIds.Select(tagId => new BlogPostTag
+            {
+                BlogPostID = BlogPost.BlogPostID,
+                TagID = tagId
+            }).ToList();
+
+            // Determine tags to remove and add
+            var tagsToRemove = existingTags.Where(et => !SelectedTagIds.Contains(et.TagID)).ToList();
+            var tagsToAdd = newTags.Where(nt => !existingTags.Any(et => et.TagID == nt.TagID)).ToList();
+
+            // Remove tags not selected
+            _context.BlogPostTag.RemoveRange(tagsToRemove);
+
+            // Add new tags
+            _context.BlogPostTag.AddRange(tagsToAdd);
 
             try
             {
