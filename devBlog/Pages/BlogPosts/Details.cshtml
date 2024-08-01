@@ -1,0 +1,88 @@
+﻿@page
+@model devBlog.Pages.BlogPosts.DetailsModel
+@using Markdig
+
+@{
+    ViewData["Title"] = "Details";
+    var markdownPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+    var htmlContent = Markdown.ToHtml(Model.BlogPost.Content ?? string.Empty, markdownPipeline);
+}
+
+@* **************** MAIN CONTENT START **************** *@
+<main>
+	@* =======================
+	Main Content START *@
+	<section class="pb-0 pt-4 pb-md-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					@* Title and Info START *@
+					<div class="row">
+						@* Avatar and Share *@
+						<div class="col-lg-3 align-items-center mt-4 mt-lg-5 order-2 order-lg-1">
+							<div class="text-lg-center">
+								@* Author info *@
+								<div class="position-relative">
+									@* Avatar *@
+									<div class="avatar avatar-xxl">
+										<img class="avatar-img rounded-circle" src="~/images/avatar/male-avatar.jpg" alt="avatar">
+									</div>
+									<a href="#" class="h5 mt-2 mb-0 d-block">@Html.DisplayFor(model => model.BlogPost.Author)</a>
+									<p class="mb-2">Blogger at Devblog</p>
+									@* modify your Blog *@
+									@if (Model.BlogPost.AuthorID == Model.CurrentUserId)
+									{
+										var item = Model.BlogPost;
+										<a class="btn btn-sm btn-warning-soft" asp-page="./Edit" asp-route-id="@Model.BlogPost.BlogPostID"><i class="bi bi-pen me-2"></i>Edit</a>
+										<a class="btn btn-sm btn-danger-soft" asp-page="./Delete" asp-route-id="@item.BlogPostID">Delete</a>
+									}
+								</div>
+							</div>
+						</div>
+
+						@* Content *@
+						<div class="col-lg-9 order-1">
+							@* Pre title *@
+							<span>@Html.DisplayFor(model => model.BlogPost.CreationDate)</span><span class="mx-2">|</span><div class="badge text-bg-success">Topic</div>
+							@* Title *@
+							<h1 class="mt-2 mb-0 display-5">@Html.DisplayFor(model => model.BlogPost.Title)</h1>
+							@* Info *@
+							<p class="mt-2">@Html.DisplayFor(model => model.BlogPost.Description)</p>
+						</div>
+					</div>
+					@* Title and Info END *@
+					@* Quote and content START *@
+					<div class="row mt-4">
+						@* Content *@
+						<div class="col-10 mx-auto mt-4 mt-lg-0">
+							<div id="blog-content" class="bg-light rounded-3 p-3">
+								@Html.Raw(htmlContent)
+							</div>
+						</div>
+						@* Tags and share START *@
+						<div class="d-lg-flex justify-content-lg-between my-4">
+							@* tags *@
+							<div class="align-items-center">
+								<h6 class="mb-2 me-4 d-inline-block">Tags:</h6>
+								<ul class="list-inline mb-0 social-media-btn">
+									@foreach (var item in Model.BlogPost.BlogPostTags)
+									{
+										<li class="list-inline-item"> <a class="btn btn-outline-light btn-sm mb-lg-0" href="#">@item.Name</a> </li>
+									}
+									@* <li class="list-inline-item"> <a class="btn btn-outline-light btn-sm mb-lg-0" href="#">business</a> </li>
+									<li class="list-inline-item"> <a class="btn btn-outline-light btn-sm mb-lg-0" href="#">bootstrap</a> </li>
+									<li class="list-inline-item"> <a class="btn btn-outline-light btn-sm mb-lg-0" href="#">data science</a> </li>
+									<li class="list-inline-item"> <a class="btn btn-outline-light btn-sm mb-lg-0" href="#">deep learning</a> </li> *@
+								</ul>
+							</div>
+						</div>
+						@* Tags and share END *@
+						<hr> @* Divider *@
+					</div>
+				</div> @* Row END *@
+			</div>
+	</section>
+	@* =======================
+	Main Content END *@
+</main>
+@* **************** MAIN CONTENT END **************** *@

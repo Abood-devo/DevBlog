@@ -1,0 +1,85 @@
+﻿@page
+@model devBlog.Pages.BlogPosts.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+}
+
+<h1 class="text-center mb-5">Edit your Blog</h1>
+
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="BlogPost.BlogPostID" />
+                <div class="form-group">
+                    <label asp-for="BlogPost.Title" class="control-label"></label>
+                    <input asp-for="BlogPost.Title" class="form-control" />
+                    <span asp-validation-for="BlogPost.Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogPost.Description" class="control-label"></label>
+                    <textarea asp-for="BlogPost.Description" class="form-control"></textarea>
+                    <span asp-validation-for="BlogPost.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogPost.Content" class="control-label"></label>
+                    <textarea asp-for="BlogPost.Content" id="markdown-input" class="form-control" rows="10" style="width:100%;" placeholder="Type your blog(markdown) here..."></textarea>
+                    <span asp-validation-for="BlogPost.Content" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogPost.CoverPhotoUrl" class="control-label"></label>
+                    <input asp-for="BlogPost.CoverPhotoUrl" class="form-control" />
+                    <span asp-validation-for="BlogPost.CoverPhotoUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="BlogPost.IsPublished" /> @Html.DisplayNameFor(model => model.BlogPost.IsPublished)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogPost.Author" class="control-label"></label>
+                    <input asp-for="BlogPost.Author" class="form-control" />
+                    <span asp-validation-for="BlogPost.Author" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogPost.TopicID" class="control-label"></label>
+                    <input asp-for="BlogPost.TopicID" class="form-control" />
+                    <span asp-validation-for="BlogPost.TopicID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-8 bg-light p-4 rounded-3 position-relative overflow-hidden">
+            <button id="preview-button" class="btn bg-primary bg-opacity-10 rounded-3 text-primary">Preview your Edits</button>
+            <div id="preview"></div>
+        </div>
+    </div>
+
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.getElementById('preview-button').addEventListener('click', function () {
+            const markdownText = document.getElementById('markdown-input').value;
+            try {
+                const htmlContent = marked.parse(markdownText); // Use `marked.parse` for the new API
+                document.getElementById('preview').innerHTML = htmlContent;
+            } catch (error) {
+                console.error("Error parsing markdown:", error);
+                document.getElementById('preview').innerHTML = "<p style='color:red;'>Error rendering markdown</p>";
+            }
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
