@@ -1,5 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+	var culture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+	var direction = culture == "ar-SA" ? "rtl" : "ltr";
+}
+<!DOCTYPE html>
+<html lang="@culture" dir="@direction">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -67,19 +71,34 @@
 	@* Favicon *@
 	<link rel="shortcut icon" href="~/images/favicon.svg">
 
-	@* Google Font *@
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap">
-
 	@* Plugins CSS *@
 	<link rel="stylesheet" type="text/css" href="~/vendor/font-awesome/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="~/vendor/bootstrap-icons/bootstrap-icons.css">
 	<link rel="stylesheet" type="text/css" href="~/vendor/tiny-slider/tiny-slider.css">
 	<link rel="stylesheet" type="text/css" href="~/vendor/glightbox/css/glightbox.css">
 
-	@* Theme CSS *@
-	<link rel="stylesheet" type="text/css" href="~/css/style.css">
+	@* Google Font *@
+		@* English *@
+		@if(culture == "en-US")
+		{
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap">
+
+			@* Theme CSS *@
+			<link rel="stylesheet" type="text/css" href="~/css/style.css">
+		}
+		else
+		{
+			@* Arabic *@
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link href="https://fonts.googleapis.com/css2?family=Zain:wght@200;300;400;700;800;900&display=swap" rel="stylesheet">
+
+			@* Theme CSS *@
+			<link rel="stylesheet" type="text/css" href="~/css/style-rtl.css">
+		}	
+	
 </head>
 <body>
 	@* Header START *@
@@ -167,7 +186,7 @@
 					@* Nav category menu END *@
 					@* Nav Main menu START *@
 					<ul class="navbar-nav navbar-nav-scroll me-auto">
-						<li class="nav-item"> <a class="nav-link" asp-area="" asp-page="/Index" aria-haspopup="true" aria-expanded="false">Home</a> </li>
+						<li class="nav-item"> <a class="nav-link" asp-area="" asp-page="/Index" aria-haspopup="true" aria-expanded="false">@Localizer["Home"]</a> </li>
 						<li class="nav-item"> <a class="nav-link" asp-area="" asp-page="/BlogPosts/Index" aria-haspopup="true" aria-expanded="false">Blogs</a> </li>
 						<li class="nav-item"> <a class="nav-link" asp-area="" asp-page="/About" aria-haspopup="true" aria-expanded="false">About</a> </li>
 						<li class="nav-item"> <a class="nav-link" asp-area="" asp-page="/Community" aria-haspopup="true" aria-expanded="false">Community</a> </li>
@@ -210,6 +229,16 @@
 						</li>
 					</ul>
 					@* Nav Main menu END *@
+					@* Language selector *@
+					<div class="dropdown mt-0 me-2 text-center text-sm-end">
+						<a class="dropdown-toggle nav-link" href="#" role="button" id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fas fa-globe me-2"></i>@Thread.CurrentThread.CurrentCulture.Name
+						</a>
+						<ul class="dropdown-menu min-w-auto" aria-labelledby="languageSwitcher">
+							<li><a class="dropdown-item me-4" asp-page="/Index" asp-route-culture="en"><img class="fa-fw me-2" src="~/images/flags/uk.svg" alt="">English</a></li>
+							<li><a class="dropdown-item me-4" asp-page="/Index" asp-route-culture="ar-sa"><img class="fa-fw me-2" src="~/images/flags/ar.svg" alt="">العربية</a></li>
+						</ul>
+					</div>
 					@* Dark mode options START *@
 					<div class="dropdown">
 						<button class="btn btn-warning-soft rounded-3 me-2" id="bd-theme"
@@ -354,11 +383,11 @@
 									@* Language selector *@
 									<div class="dropup mt-0 text-center text-sm-end">
 										<a class="dropdown-toggle nav-link" href="#" role="button" id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
-											<i class="fas fa-globe me-2"></i>Language
+											<i class="fas fa-globe me-2"></i>@Thread.CurrentThread.CurrentCulture.Name
 										</a>
 										<ul class="dropdown-menu min-w-auto" aria-labelledby="languageSwitcher">
-											<li><a class="dropdown-item me-4" href="#"><img class="fa-fw me-2" src="~/images/flags/uk.svg" alt="">English</a></li>
-											<li><a class="dropdown-item me-4" href="#"><img class="fa-fw me-2" src="~/images/flags/ar.svg" alt="">العربية</a></li>
+											<li><a class="dropdown-item me-4" asp-page="/Index" asp-route-culture="en"><img class="fa-fw me-2" src="~/images/flags/uk.svg" alt="">English</a></li>
+											<li><a class="dropdown-item me-4" asp-page="/Index" asp-route-culture="ar-sa"><img class="fa-fw me-2" src="~/images/flags/ar.svg" alt="">العربية</a></li>
 										</ul>
 									</div>
 								</li>
