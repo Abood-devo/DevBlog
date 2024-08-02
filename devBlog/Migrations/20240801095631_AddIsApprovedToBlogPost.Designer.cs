@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using devBlog.Data;
 
@@ -11,9 +12,11 @@ using devBlog.Data;
 namespace devBlog.Migrations
 {
     [DbContext(typeof(devBlogContext))]
-    partial class devBlogContextModelSnapshot : ModelSnapshot
+    [Migration("20240801095631_AddIsApprovedToBlogPost")]
+    partial class AddIsApprovedToBlogPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

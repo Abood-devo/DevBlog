@@ -108,9 +108,11 @@ namespace devBlog.Pages.BlogPosts
 
             // Add new tags
             _context.BlogPostTag.AddRange(tagsToAdd);
-
-            try
-            {
+            
+            // udate the last modified date
+			BlogPost.LastModifiedDate = DateTime.Now;
+			try
+			{
                 
                 await _context.SaveChangesAsync();
             }

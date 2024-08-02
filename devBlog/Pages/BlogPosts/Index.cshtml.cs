@@ -23,7 +23,9 @@ namespace devBlog.Pages.BlogPosts
 
         public async Task OnGetAsync()
         {
-            BlogPost = await _context.BlogPost.ToListAsync();
+            BlogPost = await _context.BlogPost
+                .Where(b => b.IsApproved && b.IsPublished)
+                .ToListAsync();
         }
     }
 }

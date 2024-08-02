@@ -28,6 +28,13 @@
                         </svg>
                     </figure>
 
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
                     @* Title *@
                     <h1>Fetured Blogs</h1>
                     <a asp-page="/BlogPosts/Create" class="btn btn-lg btn-warning me-2 my-3 mb-sm-0">Start Blogging<i class="bi bi-arrow-right ms-2"></i></a>
@@ -43,11 +50,8 @@
     <section class="position-relative pt-0">
         <div class="container">
             <div class="row g-4 filter-container overflow-hidden" data-isotope='{"layoutMode": "masonry"}'>
-
                 @foreach (var item in Model.BlogPost)
                 {
-                    if (item.IsPublished == true)
-                    {
                         @* Card item START *@
                         <div class="col-sm-6 col-lg-4 grid-item">
                             <div class="card bg-transparent">
@@ -71,7 +75,6 @@
                             </div>
                         </div>
                         @* Card item END *@
-                    }
                 }
             </div> @* Row end *@
         </div>

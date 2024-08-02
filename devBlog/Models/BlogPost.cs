@@ -16,7 +16,8 @@ namespace devBlog.Models
         [StringLength(512)]
         public string CoverPhotoUrl { get; set; }
         public bool IsPublished { get; set; }
-        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+		public bool IsApproved { get; set; }
+		[DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreationDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public string Author { get; set; }

@@ -74,4 +74,73 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+	var roles = new List<string> { "Admin", "Blogger" };
+
+    foreach (var role in roles)
+    {
+        if(! await roleManager.RoleExistsAsync(role))
+			await roleManager.CreateAsync(new IdentityRole(role));
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+	var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+	string adminEmail = "admin@admin.com";
+	string adminPassword = "Dada@asp123";	
+
+    if (await userManager.FindByEmailAsync(adminEmail) == null)
+    {
+        var user = new IdentityUser { UserName = adminEmail, Email = adminEmail };
+		await userManager.CreateAsync(user, adminPassword);
+		await userManager.AddToRoleAsync(user, "Admin");
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<devBlogContext>();
+
+    if (!await dbContext.Tag.AnyAsync())
+    {
+        var tags = new List<Tag>
+        {
+            new Tag { TagID = Guid.NewGuid(), Name = "Development" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Web Development" },
+            new Tag { TagID = Guid.NewGuid(), Name = "CSS" },
+            new Tag { TagID = Guid.NewGuid(), Name = "JavaScript" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Angular" },
+            new Tag { TagID = Guid.NewGuid(), Name = "PHP" },
+            new Tag { TagID = Guid.NewGuid(), Name = "HTML" },
+            new Tag { TagID = Guid.NewGuid(), Name = "React" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Data Science" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Mobile Development" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Programming Language" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Software Testing" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Software Engineering" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Software Development Tools" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Cybersecurity" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Network Security" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Application Security" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Data Privacy" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Incident Response" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Security Tools" },
+            new Tag { TagID = Guid.NewGuid(), Name = "AI / ML" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Machine Learning Algorithms" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Deep Learning" },
+            new Tag { TagID = Guid.NewGuid(), Name = "AI Applications" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Ethics in AI" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Cloud Computing" },
+            new Tag { TagID = Guid.NewGuid(), Name = "Tech Industry News" }
+        };
+
+        await dbContext.Tag.AddRangeAsync(tags);
+        await dbContext.SaveChangesAsync();
+    }
+}
+
 app.Run();

@@ -1,0 +1,83 @@
+﻿@page
+@model devBlog.Areas.Admin.Pages.ManageBlogsModel
+@{
+    ViewData["Title"] = "Manage Blogs";
+}
+
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+
+<section class="pb-0 pt-4 pb-md-5">
+    <div class="container">
+        <h3>Pending Approval</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Creation Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var blog in Model.PendingBlogs)
+                {
+                    <tr>
+                        <td><a href="/blogposts/details?id=@blog.BlogPostID">@blog.Title</a></td>
+                        <td>@blog.Author</td>
+                        <td>@blog.CreationDate.ToString("MM/yyyy")</td>
+                        <td>
+                            <form method="post" asp-page-handler="Approve" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form method="post" asp-page-handler="Reject" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3>Approved Blogs</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Creation Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var blog in Model.ApprovedBlogs)
+                {
+                    <tr>
+                        <td><a href="/blogposts/details?id=@blog.BlogPostID">@blog.Title</a></td>
+                        <td>@blog.Author</td>
+                        <td>@blog.CreationDate.ToString("MM/yyyy")</td>
+                        <td>
+                            @if (blog.IsPublished)
+                            {
+                                <form method="post" asp-page-handler="Suspend" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                    <button type="submit" class="btn btn-warning">Suspend</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="Reapprove" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                    <button type="submit" class="btn btn-success">Reapprove</button>
+                                </form>
+                            }
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+

@@ -1,5 +1,10 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 @{
     ViewData["Title"] = "Home page";
 }
@@ -30,6 +35,14 @@ Main Banner START *@
 			@* Main content *@
 			<div class="col-lg-6 col-xl-4 col-xxl-5 text-center position-relative">
 				@* Title *@
+				@if (User.IsInRole("Admin"))
+				{
+					<h1 class="display-6">Welcome Admin</h1>
+				}
+				else
+				{
+					<h1 class="display-6">@Localizer["Welcome"]</h1>
+				}
 				<h1 class="display-6">Discover best blogs for the best knowledge</h1>
 				@* Svg decoration *@
 				<figure class="position-absolute top-0 start-100 translate-middle pe-7 pb-4">
@@ -57,15 +70,14 @@ Main Banner START *@
 
 				@* Buttons *@
 				<div class="d-sm-flex align-items-center justify-content-center">
+					@if (User.IsInRole("Admin"))
+					{
+						@* admin Button *@
+						<a asp-page="/Admin/Manage" class="btn btn-lg btn-danger me-2 mb-4 mb-sm-0">Manage Blogs<i class="bi bi-gear-wide-connected ms-2"></i></a>
+					}
 					@* Button *@
 					<a asp-page="/BlogPosts/Index" class="btn btn-lg btn-warning me-2 mb-4 mb-sm-0">View Blogs<i class="bi bi-arrow-right ms-2"></i></a>
-					@* Video button *@
-					<div class="d-flex align-items-center justify-content-center py-2 ms-0 ms-sm-4">
-						<a data-glightbox data-gallery="office-tour" asp-page="/BlogPosts/Create" class="btn btn-lg btn-round btn-light mb-0 overflow-visible me-7">
-							<i class="bi bi-pen"></i>
-							<h6 class="mb-0 ms-2 fw-normal position-absolute start-100 top-50 translate-middle-y">Start Blogging</h6>
-						</a>
-					</div>
+					<a asp-page="/BlogPosts/Create" class="btn btn-lg btn-primary me-2 mb-4 mb-sm-0">Create Your Own Blog<i class="bi bi-pen ms-2"></i></a>
 				</div>
 			</div>
 

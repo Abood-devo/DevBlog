@@ -54,6 +54,9 @@ namespace devBlog.Pages.BlogPosts
                 return Challenge();
             }
             BlogPost.AuthorID = Guid.Parse(user);
+            BlogPost.CreationDate = DateTime.Now;
+            BlogPost.LastModifiedDate = DateTime.Now;
+            BlogPost.IsApproved = false;
 
             foreach (var tagId in SelectedTags)
             {
@@ -63,6 +66,8 @@ namespace devBlog.Pages.BlogPosts
             _context.BlogPost.Add(BlogPost);
             await _context.SaveChangesAsync();
 
+            // Redirect to a success page or the same page with a success message
+            TempData["SuccessMessage"] = "Your blog has been submitted and is pending approval from admins.";
             return RedirectToPage("./Index");
         }
     }
