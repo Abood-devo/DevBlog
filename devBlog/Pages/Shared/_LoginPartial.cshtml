@@ -24,10 +24,10 @@
 			</li>
 			<li> <hr class="dropdown-divider"></li>
 			@* Links *@
-			<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-gear fa-fw me-2"></i>Account Settings</a></li>
-			<li><a class="dropdown-item" href="#"><i class="bi bi-info-circle fa-fw me-2"></i>Help</a></li>
+			<li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-gear fa-fw me-2"></i>@Localizer["Account Settings"]</a></li>
+			<li><a class="dropdown-item" href="#"><i class="bi bi-info-circle fa-fw me-2"></i>@Localizer["Help"]</a></li>
 			<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-				<button type="submit" class="dropdown-item bg-danger-soft-hover">Logout</button>
+				<button type="submit" class="dropdown-item bg-danger-soft-hover">@Localizer["Logout"]</button>
 			</form>
 			<li> <hr class="dropdown-divider"></li>
 		</ul>
@@ -36,10 +36,10 @@
 else
 {
 	<li class="nav-item me-2">
-			<a class="btn btn-success-soft rounded-3" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item me-2">
-			<a class="btn btn-primary-soft rounded-3" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+		<a class="btn btn-success-soft rounded-3" asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a>
+	</li>
+	<li class="nav-item me-2">
+		<a class="btn btn-primary-soft rounded-3" asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a>
+	</li>
 }
 </ul>

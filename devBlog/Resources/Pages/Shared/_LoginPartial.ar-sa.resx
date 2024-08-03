@@ -117,28 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create Your Own Blog" xml:space="preserve">
-    <value>أنشئ مدونتك الخاصة</value>
+  <data name="Account Settings" xml:space="preserve">
+    <value>إعدادات الحساب</value>
   </data>
-  <data name="Discover best blogs for the best knowledge" xml:space="preserve">
-    <value>اكتشف أفضل المدونات لأفضل المعرفة</value>
+  <data name="Help" xml:space="preserve">
+    <value>مساعدة</value>
   </data>
-  <data name="Join our community of tech enthusiasts and share your insights." xml:space="preserve">
-    <value>انضم إلى مجتمع من عشاق التكنولوجيا وشارك آرائك</value>
+  <data name="Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
   </data>
-  <data name="Manage Blogs" xml:space="preserve">
-    <value>إدارة المدونات</value>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
   </data>
-  <data name="Over 2 Developers have given a five star review to creative bloggers" xml:space="preserve">
-    <value>أكثر من 2 مطورين قدموا تقييم خمس نجوم للمُدونين المبدعين</value>
-  </data>
-  <data name="View Blogs" xml:space="preserve">
-    <value>عرض المدونات</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>مرحباً بك</value>
-  </data>
-  <data name="Welcome Admin" xml:space="preserve">
-    <value>مرحباً مشرف</value>
+  <data name="Register" xml:space="preserve">
+    <value>تسجيل</value>
   </data>
 </root>

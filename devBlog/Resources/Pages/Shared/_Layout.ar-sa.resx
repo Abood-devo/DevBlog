@@ -117,7 +117,145 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>حول</value>
+  </data>
+  <data name="AI/ML" xml:space="preserve">
+    <value>الذكاء الاصطناعي / التعلم الآلي</value>
+  </data>
+  <data name="All rights reserved." xml:space="preserve">
+    <value>جميع الحقوق محفوظة.</value>
+  </data>
+  <data name="Application Security" xml:space="preserve">
+    <value>أمن التطبيقات</value>
+  </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>العربية</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>تلقائي</value>
+  </data>
+  <data name="Blogs" xml:space="preserve">
+    <value>المدونات</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>الفئة</value>
+  </data>
+  <data name="Cloud Computing" xml:space="preserve">
+    <value>الحوسبة السحابية</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>المجتمع</value>
+  </data>
+  <data name="Computer Vision" xml:space="preserve">
+    <value>رؤية الحاسوب</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>تواصل معنا</value>
+  </data>
+  <data name="Cybersecurity" xml:space="preserve">
+    <value>الأمن السيبراني</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>داكن</value>
+  </data>
+  <data name="Data Privacy" xml:space="preserve">
+    <value>خصوصية البيانات</value>
+  </data>
+  <data name="Data Science" xml:space="preserve">
+    <value>علوم البيانات</value>
+  </data>
+  <data name="Data Visualization" xml:space="preserve">
+    <value>تصور البيانات</value>
+  </data>
+  <data name="Deep Learning" xml:space="preserve">
+    <value>التعلم العميق</value>
+  </data>
+  <data name="Development" xml:space="preserve">
+    <value>تطوير</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>الوثائق</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>الإنجليزية</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>الأسئلة الشائعة</value>
+  </data>
+  <data name="Featured Blogs" xml:space="preserve">
+    <value>المدونات المميزة</value>
+  </data>
+  <data name="FooterDescription" xml:space="preserve">
+    <value>devBlog هو منصة تدوين مبتكرة تم بناؤها خصيصًا لعشاق التكنولوجيا والمطورين والمهندسين، وتكرس جهودها لمشاركة المعرفة، وتعزيز التعلم، وتمكين مجتمع التكنولوجيا.</value>
+  </data>
   <data name="Home" xml:space="preserve">
-    <value>الرئيسية</value>
+    <value>الصفحة الرئيسية</value>
+  </data>
+  <data name="Incident Response" xml:space="preserve">
+    <value>الإستجابة للحوادث</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>فاتح</value>
+  </data>
+  <data name="Machine Learning" xml:space="preserve">
+    <value>التعلم الآلي</value>
+  </data>
+  <data name="Mobile Development" xml:space="preserve">
+    <value>تطوير التطبيقات المحمولة</value>
+  </data>
+  <data name="Natural Language Processing" xml:space="preserve">
+    <value>معالجة اللغة الطبيعية</value>
+  </data>
+  <data name="Network Security" xml:space="preserve">
+    <value>أمن الشبكات</value>
+  </data>
+  <data name="Platform" xml:space="preserve">
+    <value>المنصة</value>
+  </data>
+  <data name="Privacy policy" xml:space="preserve">
+    <value>سياسة الخصوصية</value>
+  </data>
+  <data name="Programming Languages" xml:space="preserve">
+    <value>لغات البرمجة</value>
+  </data>
+  <data name="Reinforcement Learning" xml:space="preserve">
+    <value>التعلم بالتعزيز</value>
+  </data>
+  <data name="Security Tools" xml:space="preserve">
+    <value>أدوات الأمان</value>
+  </data>
+  <data name="Sitemap" xml:space="preserve">
+    <value>خريطة الموقع</value>
+  </data>
+  <data name="Software Development Tools" xml:space="preserve">
+    <value>أدوات تطوير البرمجيات</value>
+  </data>
+  <data name="Software Engineering" xml:space="preserve">
+    <value>هندسة البرمجيات</value>
+  </data>
+  <data name="Software Testing" xml:space="preserve">
+    <value>فحص البرمجيات</value>
+  </data>
+  <data name="Tech Industry News" xml:space="preserve">
+    <value>أخبار صناعة التكنولوجيا</value>
+  </data>
+  <data name="Terms of use" xml:space="preserve">
+    <value>شروط الاستخدام</value>
+  </data>
+  <data name="Toll free" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="View all categories" xml:space="preserve">
+    <value>عرض جميع الفئات</value>
+  </data>
+  <data name="Web Development" xml:space="preserve">
+    <value>تطوير الويب</value>
   </data>
 </root>
