@@ -6,33 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+
 
 namespace devBlog.Pages.BlogPosts
 {
 	[Authorize]
-    public class EditModel : PageModel
+    public class EditModel(IBlogPostService blogPostRepository, ITagService TagRepository, UserManager<IdentityUser> userManager) : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBlogPostService _blogPostRepository = blogPostRepository;
+        private readonly ITagService _TagRepository = TagRepository;
+		private readonly UserManager<IdentityUser> _userManager = userManager;
 
-        public EditModel(devBlog.Data.devBlogContext context, UserManager<IdentityUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
-
-        [BindProperty]
+		[BindProperty]
         public BlogPost BlogPost { get; set; } = default!;
-        
-        // Additional properties for tags
-        public SelectList AvailableTags { get; set; } = default!;
+
         [BindProperty]
-        public List<Guid> SelectedTagIds { get; set; } = new List<Guid>();
-        
+        public List<Guid> SelectedTagIds { get; set; } = [];
+
+        public List<Tag> Tags { get; set; } = [];
+
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
@@ -47,10 +44,7 @@ namespace devBlog.Pages.BlogPosts
             }
             var userid = Guid.Parse(user);
 
-            var blogpost = await _context.BlogPost
-                .Include(bp => bp.BlogPostTags) // Include BlogPostTags to access related tags
-                .ThenInclude(bt => bt.Tag)
-                .FirstOrDefaultAsync(m => m.BlogPostID == id);
+            var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
             if (blogpost == null)
             {
                 return NotFound();
@@ -58,13 +52,14 @@ namespace devBlog.Pages.BlogPosts
 
             if (blogpost.AuthorID != userid)
             {
-                return Redirect("/blogposts/Create");
+                return Redirect("/blogposts/Details");
             }
             BlogPost = blogpost;
 
             // Populate AvailableTags and SelectedTagIds
-            AvailableTags = new SelectList(await _context.Tag.ToListAsync(), "TagID", "Name");
-            SelectedTagIds = blogpost.BlogPostTags.Select(bt => bt.TagID).ToList();
+            Tags = (await _TagRepository.GetAllTagsAsync()).ToList();
+            var blogPostTags = (await _blogPostRepository.GetBlogPostTagsAsync(id.Value)).Select(t => t.TagID).ToList();
+            SelectedTagIds = blogPostTags;
             return Page();
         }
 
@@ -74,6 +69,7 @@ namespace devBlog.Pages.BlogPosts
         {
             if (!ModelState.IsValid)
             {
+                Tags = (await _TagRepository.GetAllTagsAsync()).ToList();
                 return Page();
             }
             var user = _userManager.GetUserId(User);
@@ -84,14 +80,10 @@ namespace devBlog.Pages.BlogPosts
             }
 
             BlogPost.AuthorID = Guid.Parse(user);
-
-
-            _context.Attach(BlogPost).State = EntityState.Modified;
+            BlogPost.LastModifiedDate = DateTime.Now;
 
             // Handle the tags
-            var existingTags = _context.BlogPostTag
-                .Where(bpt => bpt.BlogPostID == BlogPost.BlogPostID)
-                .ToList();
+            var existingTags = await _blogPostRepository.GetBlogPostTagsAsync(BlogPost.BlogPostID);
 
             var newTags = SelectedTagIds.Select(tagId => new BlogPostTag
             {
@@ -100,25 +92,29 @@ namespace devBlog.Pages.BlogPosts
             }).ToList();
 
             // Determine tags to remove and add
-            var tagsToRemove = existingTags.Where(et => !SelectedTagIds.Contains(et.TagID)).ToList();
-            var tagsToAdd = newTags.Where(nt => !existingTags.Any(et => et.TagID == nt.TagID)).ToList();
+            var tagsToRemove = existingTags
+                .Where(et => !SelectedTagIds.Contains(et.TagID))
+                .Select(et => new BlogPostTag
+                {
+                    BlogPostID = BlogPost.BlogPostID,
+                    TagID = et.TagID
+                }).ToList();
 
-            // Remove tags not selected
-            _context.BlogPostTag.RemoveRange(tagsToRemove);
+            var tagsToAdd = newTags
+                .Where(nt => !existingTags.Any(et => et.TagID == nt.TagID))
+                .ToList();
 
-            // Add new tags
-            _context.BlogPostTag.AddRange(tagsToAdd);
-            
-            // udate the last modified date
-			BlogPost.LastModifiedDate = DateTime.Now;
-			try
-			{
-                
-                await _context.SaveChangesAsync();
+            await _blogPostRepository.RemoveBlogPostTagsAsync(tagsToRemove);
+            await _blogPostRepository.AddBlogPostTagsAsync(tagsToAdd);
+
+
+            try
+            {
+                await _blogPostRepository.UpdateBlogPostAsync(BlogPost);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BlogPostExists(BlogPost.BlogPostID))
+                if (!await _blogPostRepository.BlogPostExists(BlogPost.BlogPostID))
                 {
                     return NotFound();
                 }
@@ -129,11 +125,6 @@ namespace devBlog.Pages.BlogPosts
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool BlogPostExists(Guid id)
-        {
-            return _context.BlogPost.Any(e => e.BlogPostID == id);
         }
     }
 }

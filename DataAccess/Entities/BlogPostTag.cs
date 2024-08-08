@@ -1,4 +1,4 @@
-﻿namespace devBlog.Models
+﻿namespace DataAccess.Entities
 {
     public class BlogPostTag
     {

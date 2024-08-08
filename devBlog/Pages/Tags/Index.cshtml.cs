@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Data;
+using DataAccess.Entities;
 
 namespace devBlog.Pages.Tags
 {
     public class IndexModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+        private readonly devBlogContext _context;
 
-        public IndexModel(devBlog.Data.devBlogContext context)
+        public IndexModel(devBlogContext context)
         {
             _context = context;
         }

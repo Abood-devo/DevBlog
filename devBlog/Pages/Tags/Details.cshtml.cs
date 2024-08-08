@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.Tags
 {
-    public class DetailsModel : PageModel
+	public class DetailsModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+		private readonly ITagService _TagService;
 
-        public DetailsModel(devBlog.Data.devBlogContext context)
-        {
-            _context = context;
-        }
+		public DetailsModel(ITagService blogPostService)
+		{
+			_TagService = blogPostService;
+		}
 
-        public Tag Tag { get; set; } = default!;
+		public Tag Tag { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -28,7 +24,7 @@ namespace devBlog.Pages.Tags
                 return NotFound();
             }
 
-            var tag = await _context.Tag.FirstOrDefaultAsync(m => m.TagID == id);
+            var tag = await _TagService.GetTagByIdAsync(id.Value);
             if (tag == null)
             {
                 return NotFound();

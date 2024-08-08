@@ -32,9 +32,9 @@
 									@* modify your Blog *@
 									@if (Model.BlogPost.AuthorID == Model.CurrentUserId)
 									{
-										var item = Model.BlogPost;
-										<a class="btn btn-sm btn-warning-soft" asp-page="./Edit" asp-route-id="@Model.BlogPost.BlogPostID"><i class="bi bi-pen me-2"></i>Edit</a>
-										<a class="btn btn-sm btn-danger-soft" asp-page="./Delete" asp-route-id="@item.BlogPostID">Delete</a>
+										var PostId = Model.BlogPost.BlogPostID;
+										<a class="btn btn-sm btn-warning-soft" asp-page="./Edit" asp-route-id="@PostId"><i class="bi bi-pen me-2"></i>Edit</a>
+										<a class="btn btn-sm btn-danger-soft" asp-page="./Delete" asp-route-id="@PostId">Delete</a>
 									}
 								</div>
 							</div>

@@ -1,31 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using DataAccess.Entities;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.BlogPosts
 {
     public class IndexModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+        private readonly IBlogPostService _blogPostService;
 
-        public IndexModel(devBlog.Data.devBlogContext context)
+        public IndexModel(IBlogPostService blogPostRepository)
         {
-            _context = context;
+            _blogPostService = blogPostRepository;
         }
 
         public IList<BlogPost> BlogPost { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            BlogPost = await _context.BlogPost
-                .Where(b => b.IsApproved && b.IsPublished)
-                .ToListAsync();
+            BlogPost = (await _blogPostService.GetBlogPostsAsync()).ToList();
         }
     }
 }

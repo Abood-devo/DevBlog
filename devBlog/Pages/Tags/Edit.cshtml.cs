@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.Tags
 {
-    public class EditModel : PageModel
+	public class EditModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+		private readonly ITagService _TagService;
 
-        public EditModel(devBlog.Data.devBlogContext context)
-        {
-            _context = context;
-        }
+		public EditModel(ITagService blogPostService)
+		{
+			_TagService = blogPostService;
+		}
 
-        [BindProperty]
+		[BindProperty]
         public Tag Tag { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -30,7 +25,7 @@ namespace devBlog.Pages.Tags
                 return NotFound();
             }
 
-            var tag =  await _context.Tag.FirstOrDefaultAsync(m => m.TagID == id);
+            var tag =  await _TagService.GetTagByIdAsync(id.Value);
             if (tag == null)
             {
                 return NotFound();
@@ -48,15 +43,13 @@ namespace devBlog.Pages.Tags
                 return Page();
             }
 
-            _context.Attach(Tag).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+				await _TagService.UpdateTagAsync(Tag);
+			}
+			catch (DbUpdateConcurrencyException)
             {
-                if (!TagExists(Tag.TagID))
+                if (!await _TagService.TagExists(Tag.TagID))
                 {
                     return NotFound();
                 }
@@ -67,11 +60,6 @@ namespace devBlog.Pages.Tags
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool TagExists(Guid id)
-        {
-            return _context.Tag.Any(e => e.TagID == id);
         }
     }
 }

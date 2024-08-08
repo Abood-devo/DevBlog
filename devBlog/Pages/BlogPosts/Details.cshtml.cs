@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.BlogPosts
 {
 	[Authorize]
-	public class DetailsModel : PageModel
+	public class DetailsModel(IBlogPostService blogPostRepository, UserManager<IdentityUser> userManager) : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IBlogPostService _blogPostRepository = blogPostRepository;
+        private readonly UserManager<IdentityUser> _userManager = userManager;
 
-        public DetailsModel(devBlog.Data.devBlogContext context, UserManager<IdentityUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
-
-        public BlogPost BlogPost { get; set; } = default!;
-		public List<Tag> Tags { get; set; } = new List<Tag>();
+		public BlogPost BlogPost { get; set; } = default!;
+		public IEnumerable<Tag> Tags { get; set; } = default!;
 		public Guid CurrentUserId { get; set; }
-
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -36,12 +24,9 @@ namespace devBlog.Pages.BlogPosts
                 return NotFound();
             }
 
-			var blogpost = await _context.BlogPost
-				.Include(bp => bp.BlogPostTags)
-				.ThenInclude(bpt => bpt.Tag)
-				.FirstOrDefaultAsync(m => m.BlogPostID == id);
+			var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
+            var blogposttags = await _blogPostRepository.GetBlogPostTagsAsync(id.Value);
 
-			//var blogpost = await _context.BlogPost.FirstOrDefaultAsync(m => m.BlogPostID == id);
             if (blogpost == null)
             {
                 return NotFound();
@@ -49,8 +34,9 @@ namespace devBlog.Pages.BlogPosts
             else
             {
                 BlogPost = blogpost;
-				Tags = BlogPost.BlogPostTags.Select(bpt => bpt.Tag).ToList();
-				var userId = _userManager.GetUserId(User);
+                Tags = blogposttags;
+
+                var userId = _userManager.GetUserId(User);
 				if (userId != null)
 				{
 					CurrentUserId = Guid.Parse(userId);

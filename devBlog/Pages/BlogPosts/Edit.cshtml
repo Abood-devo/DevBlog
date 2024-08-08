@@ -47,14 +47,14 @@
                             Modify Tags
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="tagsDropdown">
-                            @foreach (var tag in Model.AvailableTags)
+                            @foreach (var tag in Model.Tags)
                             {
-                                var tagGuid = Guid.Parse(tag.Value.ToString());
+                                var tagGuid = Guid.Parse(tag.TagID.ToString());
                                 <li>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="tag_@tag.Value" name="SelectedTagIds" value="@tag.Value"
+                                        <input type="checkbox" class="form-check-input" id="tag_@tagGuid" name="SelectedTagIds" value="@tagGuid"
                                         @(Model.SelectedTagIds.Contains(tagGuid) ? "checked" : "") />
-                                        <label class="form-check-label" for="tag_@tag.Value">@tag.Text</label>
+                                        <label class="form-check-label" for="tag_@tagGuid">@tag.Name</label>
                                     </div>
                                 </li>
                             }

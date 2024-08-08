@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.Tags
 {
-    public class CreateModel : PageModel
+	public class CreateModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+		private readonly ITagService _TagService;
 
-        public CreateModel(devBlog.Data.devBlogContext context)
+		public CreateModel(ITagService blogPostService)
         {
-            _context = context;
-        }
+			_TagService = blogPostService;
+		}
 
         public IActionResult OnGet()
         {
@@ -35,8 +30,7 @@ namespace devBlog.Pages.Tags
                 return Page();
             }
 
-            _context.Tag.Add(Tag);
-            await _context.SaveChangesAsync();
+            await _TagService.CreateTagAsync(Tag);
 
             return RedirectToPage("./Index");
         }

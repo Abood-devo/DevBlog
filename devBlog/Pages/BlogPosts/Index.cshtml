@@ -52,6 +52,8 @@
             <div class="row g-4 filter-container overflow-hidden" data-isotope='{"layoutMode": "masonry"}'>
                 @foreach (var item in Model.BlogPost)
                 {
+                    @if(item.IsPublished && item.IsApproved)
+                    {
                         @* Card item START *@
                         <div class="col-sm-6 col-lg-4 grid-item">
                             <div class="card bg-transparent">
@@ -75,6 +77,7 @@
                             </div>
                         </div>
                         @* Card item END *@
+                    }
                 }
             </div> @* Row end *@
         </div>

@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Data;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.BlogPosts
 {
-	[Authorize]
+    [Authorize]
     public class DeleteModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+        private readonly IBlogPostService _blogPostRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public DeleteModel(devBlog.Data.devBlogContext context, UserManager<IdentityUser> userManager)
+        public DeleteModel(IBlogPostService blogPostRepository, UserManager<IdentityUser> userManager)
         {
-            _context = context;
+            _blogPostRepository = blogPostRepository;
             _userManager = userManager;
         }
 
@@ -34,7 +31,7 @@ namespace devBlog.Pages.BlogPosts
                 return NotFound();
             }
 
-            var blogpost = await _context.BlogPost.FirstOrDefaultAsync(m => m.BlogPostID == id);
+            var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
             var user = _userManager.GetUserId(User);
             if (user == null)
             {
@@ -51,7 +48,7 @@ namespace devBlog.Pages.BlogPosts
                 BlogPost = blogpost;
                 if (blogpost.AuthorID != userid)
                 {
-                    return Redirect("/blogposts/Create");
+                    return Redirect("/blogposts/Details");
                 }
             }
             return Page();
@@ -64,14 +61,13 @@ namespace devBlog.Pages.BlogPosts
                 return NotFound();
             }
 
-            var blogpost = await _context.BlogPost.FindAsync(id);
+            //var blogpost = await _context.BlogPost.FindAsync(id);
+            var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
             if (blogpost != null)
-            {
-                BlogPost = blogpost;
-                _context.BlogPost.Remove(BlogPost);
-                await _context.SaveChangesAsync();
-            }
-
+                await _blogPostRepository.DeleteBlogPostAsync(blogpost.BlogPostID);
+            
+            // Redirect index page with a success delete operation message
+            TempData["SuccessMessage"] = "Your blog has been deleted.";
             return RedirectToPage("./Index");
         }
     }

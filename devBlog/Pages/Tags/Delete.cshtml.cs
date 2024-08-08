@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using devBlog.Data;
-using devBlog.Models;
+using DataAccess.Entities;
+using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.Tags
 {
-    public class DeleteModel : PageModel
+	public class DeleteModel : PageModel
     {
-        private readonly devBlog.Data.devBlogContext _context;
+		private readonly ITagService _TagService;
 
-        public DeleteModel(devBlog.Data.devBlogContext context)
-        {
-            _context = context;
-        }
+		public DeleteModel(ITagService blogPostService)
+		{
+			_TagService = blogPostService;
+		}
 
-        [BindProperty]
+		[BindProperty]
         public Tag Tag { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -29,7 +25,7 @@ namespace devBlog.Pages.Tags
                 return NotFound();
             }
 
-            var tag = await _context.Tag.FirstOrDefaultAsync(m => m.TagID == id);
+            var tag = await _TagService.GetTagByIdAsync(id.Value);
 
             if (tag == null)
             {
@@ -49,12 +45,11 @@ namespace devBlog.Pages.Tags
                 return NotFound();
             }
 
-            var tag = await _context.Tag.FindAsync(id);
+            var tag = await _TagService.GetTagByIdAsync(id.Value);
             if (tag != null)
             {
                 Tag = tag;
-                _context.Tag.Remove(Tag);
-                await _context.SaveChangesAsync();
+                await _TagService.DeleteTagAsync(id.Value);
             }
 
             return RedirectToPage("./Index");

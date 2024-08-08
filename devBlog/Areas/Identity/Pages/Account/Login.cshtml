@@ -8,7 +8,7 @@
 @* **************** MAIN CONTENT START **************** *@
 <main>
 	<section class="p-0 d-flex align-items-center position-relative overflow-hidden">
-		<div class="container-fluid">
+		<div class="container">
 			<div class="row">
 				@* left *@
 				<div class="col-12 col-lg-6 d-md-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-3 vh-lg-100">
@@ -59,7 +59,7 @@
 								<div class="mb-4 d-flex justify-content-between">
 									<div class="form-check">
 										<input asp-for="Input.RememberMe" type="checkbox" class="form-check-input" id="exampleCheck1">
-										<label class="form-check-label"  asp-for="Input.RememberMe">Remember me</label>
+										<label class="form-check-label" asp-for="Input.RememberMe">Remember me</label>
 										@Html.DisplayNameFor(m => m.Input.RememberMe)
 									</div>
 									<div class="text-primary-hover">

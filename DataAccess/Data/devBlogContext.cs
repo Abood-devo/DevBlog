@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using devBlog.Models;
+﻿using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace devBlog.Data
+namespace DataAccess.Data
 {
     public class devBlogContext : DbContext
     {
