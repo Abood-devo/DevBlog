@@ -8,9 +8,9 @@ namespace devBlog.Pages.BlogPosts
     {
         private readonly IBlogPostService _blogPostService;
 
-        public IndexModel(IBlogPostService blogPostRepository)
+        public IndexModel(IBlogPostService blogPostService)
         {
-            _blogPostService = blogPostRepository;
+            _blogPostService = blogPostService;
         }
 
         public IList<BlogPost> BlogPost { get;set; } = default!;

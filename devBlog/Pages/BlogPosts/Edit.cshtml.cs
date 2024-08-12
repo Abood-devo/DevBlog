@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BusinessLogic.Interfaces;
-using BusinessLogic.Services;
 
 
 namespace devBlog.Pages.BlogPosts
 {
-	[Authorize]
-    public class EditModel(IBlogPostService blogPostRepository, ITagService TagRepository, UserManager<IdentityUser> userManager) : PageModel
+    [Authorize]
+    public class EditModel(IBlogPostService blogPostService, ITagService tagService, UserManager<IdentityUser> userManager) : PageModel
     {
-        private readonly IBlogPostService _blogPostRepository = blogPostRepository;
-        private readonly ITagService _TagRepository = TagRepository;
+        private readonly IBlogPostService _blogPostService = blogPostService;
+        private readonly ITagService _tagService = tagService;
 		private readonly UserManager<IdentityUser> _userManager = userManager;
 
 		[BindProperty]
@@ -44,7 +38,7 @@ namespace devBlog.Pages.BlogPosts
             }
             var userid = Guid.Parse(user);
 
-            var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
+            var blogpost = await _blogPostService.GetBlogPostByIdAsync(id.Value);
             if (blogpost == null)
             {
                 return NotFound();
@@ -57,8 +51,8 @@ namespace devBlog.Pages.BlogPosts
             BlogPost = blogpost;
 
             // Populate AvailableTags and SelectedTagIds
-            Tags = (await _TagRepository.GetAllTagsAsync()).ToList();
-            var blogPostTags = (await _blogPostRepository.GetBlogPostTagsAsync(id.Value)).Select(t => t.TagID).ToList();
+            Tags = (await _tagService.GetAllTagsAsync()).ToList();
+            var blogPostTags = (await _blogPostService.GetBlogPostTagsAsync(id.Value)).Select(t => t.TagID).ToList();
             SelectedTagIds = blogPostTags;
             return Page();
         }
@@ -69,7 +63,7 @@ namespace devBlog.Pages.BlogPosts
         {
             if (!ModelState.IsValid)
             {
-                Tags = (await _TagRepository.GetAllTagsAsync()).ToList();
+                Tags = (await _tagService.GetAllTagsAsync()).ToList();
                 return Page();
             }
             var user = _userManager.GetUserId(User);
@@ -83,7 +77,7 @@ namespace devBlog.Pages.BlogPosts
             BlogPost.LastModifiedDate = DateTime.Now;
 
             // Handle the tags
-            var existingTags = await _blogPostRepository.GetBlogPostTagsAsync(BlogPost.BlogPostID);
+            var existingTags = await _blogPostService.GetBlogPostTagsAsync(BlogPost.BlogPostID);
 
             var newTags = SelectedTagIds.Select(tagId => new BlogPostTag
             {
@@ -104,17 +98,17 @@ namespace devBlog.Pages.BlogPosts
                 .Where(nt => !existingTags.Any(et => et.TagID == nt.TagID))
                 .ToList();
 
-            await _blogPostRepository.RemoveBlogPostTagsAsync(tagsToRemove);
-            await _blogPostRepository.AddBlogPostTagsAsync(tagsToAdd);
+            await _blogPostService.RemoveBlogPostTagsAsync(tagsToRemove);
+            await _blogPostService.AddBlogPostTagsAsync(tagsToAdd);
 
 
             try
             {
-                await _blogPostRepository.UpdateBlogPostAsync(BlogPost);
+                await _blogPostService.UpdateBlogPostAsync(BlogPost);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _blogPostRepository.BlogPostExists(BlogPost.BlogPostID))
+                if (!await _blogPostService.BlogPostExists(BlogPost.BlogPostID))
                 {
                     return NotFound();
                 }

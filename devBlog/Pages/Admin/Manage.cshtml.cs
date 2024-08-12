@@ -4,21 +4,20 @@ using DataAccess.Entities;
 using Microsoft.AspNetCore.Authorization;
 using BusinessLogic.Interfaces;
 
-namespace devBlog.Areas.Admin.Pages
+namespace devBlog.Pages.Admin
 {
 	[Authorize(Roles = "Admin")]
     public class ManageBlogsModel : PageModel
     {
 		private readonly IBlogPostService _blogPostService;
 
-        public ManageBlogsModel(IBlogPostService blogPostRepository)
+        public ManageBlogsModel(IBlogPostService blogPostService)
 		{
-			_blogPostService = blogPostRepository;
+			_blogPostService = blogPostService;
 		}
 
-        public IList<BlogPost> BlogPosts { get; set; }
-        public IList<BlogPost> PendingBlogs { get; set; }
-        public IList<BlogPost> ApprovedBlogs { get; set; }
+        public IList<BlogPost>? PendingBlogs { get; set; }
+        public IList<BlogPost>? ApprovedBlogs { get; set; }
 		public void OnGet()
 		{
 			PendingBlogs = _blogPostService.GetPendingBlogPostsAsync().Result.ToList();

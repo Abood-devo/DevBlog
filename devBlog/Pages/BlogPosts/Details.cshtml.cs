@@ -8,9 +8,9 @@ using BusinessLogic.Interfaces;
 namespace devBlog.Pages.BlogPosts
 {
 	[Authorize]
-	public class DetailsModel(IBlogPostService blogPostRepository, UserManager<IdentityUser> userManager) : PageModel
+	public class DetailsModel(IBlogPostService blogPostService, UserManager<IdentityUser> userManager) : PageModel
     {
-        private readonly IBlogPostService _blogPostRepository = blogPostRepository;
+        private readonly IBlogPostService _blogPostService = blogPostService;
         private readonly UserManager<IdentityUser> _userManager = userManager;
 
 		public BlogPost BlogPost { get; set; } = default!;
@@ -24,8 +24,8 @@ namespace devBlog.Pages.BlogPosts
                 return NotFound();
             }
 
-			var blogpost = await _blogPostRepository.GetBlogPostByIdAsync(id.Value);
-            var blogposttags = await _blogPostRepository.GetBlogPostTagsAsync(id.Value);
+			var blogpost = await _blogPostService.GetBlogPostByIdAsync(id.Value);
+            var blogposttags = await _blogPostService.GetBlogPostTagsAsync(id.Value);
 
             if (blogpost == null)
             {
