@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Entities;
 using BusinessLogic.Interfaces;
+using BusinessLogic.DTOs;
 
 namespace devBlog.Pages.Tags
 {
-	public class DetailsModel : PageModel
+    public class DetailsModel : PageModel
     {
 		private readonly ITagService _TagService;
 
@@ -15,7 +14,7 @@ namespace devBlog.Pages.Tags
 			_TagService = blogPostService;
 		}
 
-		public Tag Tag { get; set; } = default!;
+		public TagDTO Tag { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {

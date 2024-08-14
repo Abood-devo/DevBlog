@@ -8,12 +8,9 @@ namespace DataAccess.Interfaces
         Task<BlogPost> DeleteBlogPostAsync(Guid blogPostId);
         Task<BlogPost> GetBlogPostByIdAsync(Guid blogPostId);
         Task<IEnumerable<BlogPost>> GetBlogPostsAsync();
-        Task<IEnumerable<BlogPost>> GetPendingBlogPostsAsync();
-        Task<IEnumerable<BlogPost>> GetApprovedBlogPostsAsync();
         Task<BlogPost> UpdateBlogPostAsync(BlogPost blogPost);
-        void RemoveBlogPostTags(IEnumerable<BlogPostTag> blogPostTags);
-        void AddBlogPostTags(IEnumerable<BlogPostTag> blogPostTags);
+        Task RemoveBlogPostTags(IEnumerable<BlogPostTag> blogPostTags);
+        Task AddBlogPostTags(IEnumerable<BlogPostTag> blogPostTags);
         Task<IEnumerable<Tag>> GetBlogPostTagsAsync(Guid blogPostId);
-        Task SaveChangesAsync();
     }
 }

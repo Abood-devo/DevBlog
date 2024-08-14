@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using DataAccess.Entities;
+using BusinessLogic.DTOs;
 using BusinessLogic.Interfaces;
 
 namespace devBlog.Pages.BlogPosts
@@ -13,7 +13,7 @@ namespace devBlog.Pages.BlogPosts
             _blogPostService = blogPostService;
         }
 
-        public IList<BlogPost> BlogPost { get;set; } = default!;
+        public IList<BlogPostDTO> BlogPost { get;set; } = default!;
 
         public async Task OnGetAsync()
         {

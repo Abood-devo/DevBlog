@@ -16,8 +16,8 @@ namespace DataAccess.Entities
         [StringLength(512)]
         public required string CoverPhotoUrl { get; set; }
         public bool IsPublished { get; set; }
-		public bool IsApproved { get; set; }
-		[DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
+        public bool IsApproved { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreationDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public required string Author { get; set; }

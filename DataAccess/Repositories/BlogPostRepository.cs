@@ -12,6 +12,11 @@ namespace DataAccess.Repositories
         public async Task<BlogPost> CreateBlogPostAsync(BlogPost blogPost)
         {
             _context.BlogPost.Add(blogPost);
+            
+            // initialize the creation and last modified date
+            blogPost.CreationDate = DateTime.Now;
+            blogPost.LastModifiedDate = DateTime.Now;
+            blogPost.IsApproved = false;
             await _context.SaveChangesAsync();
             return blogPost;
         }
@@ -38,19 +43,34 @@ namespace DataAccess.Repositories
         {
             return await _context.BlogPost.ToListAsync();
         }
-
         public async Task<BlogPost> UpdateBlogPostAsync(BlogPost blogPost)
         {
-            _context.Entry(blogPost).State = EntityState.Modified;
+            // Retrieve the existing blog post from the database
+            var existingBlogPost = await _context.BlogPost
+                .Include(bp => bp.BlogPostTags) // If you need to update tags
+                .FirstOrDefaultAsync(bp => bp.BlogPostID == blogPost.BlogPostID);
+
+            if (existingBlogPost == null)
+            {
+                return null;
+            }
+
+            // Update properties
+            existingBlogPost.Title = blogPost.Title;
+            existingBlogPost.Content = blogPost.Content;
+            existingBlogPost.LastModifiedDate = DateTime.Now;
+            existingBlogPost.IsApproved = false;
+
+            // Update tags (optional)
+            if (blogPost.BlogPostTags != null)
+            {
+                _context.BlogPostTag.RemoveRange(existingBlogPost.BlogPostTags);
+                existingBlogPost.BlogPostTags = blogPost.BlogPostTags;
+            }
+
             await _context.SaveChangesAsync();
-            return blogPost;
+            return existingBlogPost;
         }
-
-        public async Task<IEnumerable<Tag>> GetTagsAsync()
-        {
-            return await _context.Tag.ToListAsync();
-        }
-
         public async Task<IEnumerable<Tag>> GetBlogPostTagsAsync(Guid blogPostId)
         {
             return await _context.BlogPostTag
@@ -59,33 +79,16 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public void RemoveBlogPostTags(IEnumerable<BlogPostTag> blogPostTags)
+        public async Task RemoveBlogPostTags(IEnumerable<BlogPostTag> blogPostTags)
         {
             _context.BlogPostTag.RemoveRange(blogPostTags);
-        }
-
-        public void AddBlogPostTags(IEnumerable<BlogPostTag> blogPostTags)
-        {
-            _context.BlogPostTag.AddRange(blogPostTags);
-        }
-
-        public async Task SaveChangesAsync()
-        {
             await _context.SaveChangesAsync();
         }
 
-		public async Task<IEnumerable<BlogPost>> GetPendingBlogPostsAsync()
-		{
-			 return await _context.BlogPost
-			    .Where(b => !b.IsApproved && b.IsPublished)
-			    .ToListAsync();
-		}
-
-		public async Task<IEnumerable<BlogPost>> GetApprovedBlogPostsAsync()
-		{
-		    return await _context.BlogPost
-				.Where(b => b.IsApproved)
-				.ToListAsync();
-		}
+        public async Task AddBlogPostTags(IEnumerable<BlogPostTag> blogPostTags)
+        {
+            _context.BlogPostTag.AddRange(blogPostTags);
+            await _context.SaveChangesAsync();
+        }
 	}
 }

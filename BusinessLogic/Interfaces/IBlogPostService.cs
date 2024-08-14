@@ -1,20 +1,18 @@
-﻿using DataAccess.Entities;
+﻿using BusinessLogic.DTOs;
+using DataAccess.Entities;
 
 namespace BusinessLogic.Interfaces
 {
 	public interface IBlogPostService
     {
-        Task<BlogPost> CreateBlogPostAsync(BlogPost blogPost);
-        Task<BlogPost> DeleteBlogPostAsync(Guid blogPostId);
-        Task<BlogPost> GetBlogPostByIdAsync(Guid blogPostId);
-        Task<IEnumerable<BlogPost>> GetBlogPostsAsync();
-        Task<BlogPost> UpdateBlogPostAsync(BlogPost blogPost);
-        Task<IEnumerable<Tag>> GetBlogPostTagsAsync(Guid blogPostId);
-        Task AddBlogPostTagsAsync(IEnumerable<BlogPostTag> blogPostTags);
-        Task RemoveBlogPostTagsAsync(IEnumerable<BlogPostTag> blogPostTags);
+        Task<BlogPost> CreateBlogPostAsync(BlogPostDTO blogPostDTO);
+        Task<BlogPostDTO> DeleteBlogPostAsync(Guid blogPostId);
+        Task<BlogPostDTO> GetBlogPostByIdAsync(Guid blogPostId);
+        Task<IEnumerable<BlogPostDTO>> GetBlogPostsAsync();
+        Task<BlogPost> UpdateBlogPostAsync(BlogPostDTO blogPostDTO);
+        Task<IEnumerable<TagDTO>> GetBlogPostTagsAsync(Guid blogPostId);
+        Task AddBlogPostTagsAsync(IEnumerable<BlogPostTagDTO> blogPostTagsDTO);
+        Task RemoveBlogPostTagsAsync(IEnumerable<BlogPostTagDTO> blogPostTagsDTO);
         Task<bool> BlogPostExists(Guid id);
-        Task<IEnumerable<BlogPost>> GetApprovedBlogPostsAsync();
-        Task<IEnumerable<BlogPost>> GetPendingBlogPostsAsync();
-		Task SaveChangesAsync();
 	}
 }

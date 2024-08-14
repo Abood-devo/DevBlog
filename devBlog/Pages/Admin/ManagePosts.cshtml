@@ -58,12 +58,9 @@
                         <td>@blog.Author</td>
                         <td>@blog.CreationDate.ToString("MM/yyyy")</td>
                         <td>
-                            @if (blog.IsPublished && blog.IsApproved)
-                            {
-                                <form method="post" asp-page-handler="Suspend" asp-route-id="@blog.BlogPostID" style="display:inline;">
-                                    <button type="submit" class="btn btn-warning">Suspend</button>
-                                </form>
-                            }
+                            <form method="post" asp-page-handler="Suspend" asp-route-id="@blog.BlogPostID" style="display:inline;">
+                                <button type="submit" class="btn btn-warning">Suspend</button>
+                            </form>
                             <form method="post" asp-page-handler="Delete" asp-route-id="@blog.BlogPostID" style="display:inline;">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>

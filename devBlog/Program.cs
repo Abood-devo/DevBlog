@@ -18,7 +18,8 @@ builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ITagService, TagService>();
 
-
+builder.Services.AddScoped<IManagePostsRepository, ManagePostsRepository>();
+builder.Services.AddScoped<IManagePostsService, ManagePostsService>();
 
 // Adding localizations to the application
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BusinessLogic.Interfaces;
+using BusinessLogic.DTOs;
 
 namespace devBlog.Pages.BlogPosts
 {
@@ -20,7 +20,7 @@ namespace devBlog.Pages.BlogPosts
         }
 
         [BindProperty]
-        public BlogPost BlogPost { get; set; } = default!;
+        public BlogPostDTO BlogPost { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {

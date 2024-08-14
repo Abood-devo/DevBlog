@@ -73,7 +73,7 @@ Main Banner START *@
 					@if (User.IsInRole("Admin"))
 					{
 						@* admin Button *@
-						<a asp-page="/Admin/Manage" class="btn btn-lg btn-danger me-2 mb-4 mb-sm-0">@Localizer["Manage Blogs"]<i class="bi bi-gear-wide-connected ms-2"></i></a>
+						<a asp-page="/Admin/ManagePosts" class="btn btn-lg btn-danger me-2 mb-4 mb-sm-0">@Localizer["Manage Blogs"]<i class="bi bi-gear-wide-connected ms-2"></i></a>
 					}
 					@* Button *@
 					<a asp-page="/BlogPosts/Index" class="btn btn-lg btn-warning me-2 mb-4 mb-sm-0">@Localizer["View Blogs"]<i class="bi bi-arrow-right ms-2"></i></a>

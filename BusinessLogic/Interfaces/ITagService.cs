@@ -1,4 +1,5 @@
-﻿using DataAccess.Entities;
+﻿using BusinessLogic.DTOs;
+using DataAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace BusinessLogic.Interfaces
 {
 	public interface ITagService
 	{
-		Task<IEnumerable<Tag>> GetAllTagsAsync();
-		Task<Tag> GetTagByIdAsync(Guid tagId);
-		Task<Tag> CreateTagAsync(Tag tag);
-		Task<Tag> UpdateTagAsync(Tag tag);
-		Task<Tag> DeleteTagAsync(Guid tagId);
+		Task<IEnumerable<TagDTO>> GetAllTagsAsync();
+		Task<TagDTO> GetTagByIdAsync(Guid tagId);
+		Task<Tag> CreateTagAsync(TagDTO tagDTO);
+		Task<Tag> UpdateTagAsync(TagDTO tagDTO);
+		Task<TagDTO> DeleteTagAsync(Guid tagId);
 		Task<bool> TagExists(Guid id);
 	}
 }

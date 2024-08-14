@@ -1,61 +1,73 @@
 ﻿using DataAccess.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using BusinessLogic.Interfaces;
+using BusinessLogic.DTOs;
+using BusinessLogic.Extensions;
 
 namespace BusinessLogic.Services
 {
-    public class BlogPostService : IBlogPostService
+    public class BlogPostService(IBlogPostRepository blogPostRepository) : IBlogPostService
     {
-        private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IBlogPostRepository _blogPostRepository = blogPostRepository;
 
-		public BlogPostService(IBlogPostRepository blogPostRepository)
+        public async Task<BlogPost> CreateBlogPostAsync(BlogPostDTO blogPostDTO)
         {
-            _blogPostRepository = blogPostRepository;
-        }
-
-        public async Task<BlogPost> CreateBlogPostAsync(BlogPost blogPost)
-        {
+            var blogPost = blogPostDTO.ToEntity();
             return await _blogPostRepository.CreateBlogPostAsync(blogPost);
         }
 
-        public async Task<BlogPost> DeleteBlogPostAsync(Guid blogPostId)
+        public async Task<BlogPostDTO> DeleteBlogPostAsync(Guid blogPostId)
         {
-            return await _blogPostRepository.DeleteBlogPostAsync(blogPostId);
+            var blogPost = await _blogPostRepository.DeleteBlogPostAsync(blogPostId);
+            return blogPost.ToDTO();
         }
 
-        public async Task<BlogPost> GetBlogPostByIdAsync(Guid blogPostId)
+        public async Task<BlogPostDTO> GetBlogPostByIdAsync(Guid blogPostId)
         {
-            return await _blogPostRepository.GetBlogPostByIdAsync(blogPostId);
+            var blogPost = await _blogPostRepository.GetBlogPostByIdAsync(blogPostId);
+            return blogPost.ToDTO();
         }
 
-        public async Task<IEnumerable<BlogPost>> GetBlogPostsAsync()
+        public async Task<IEnumerable<BlogPostDTO>> GetBlogPostsAsync()
         {
-            return await _blogPostRepository.GetBlogPostsAsync();
+            var blogPosts = await _blogPostRepository.GetBlogPostsAsync();
+            return blogPosts.Select(bp => 
+            { 
+                return bp.ToDTO();
+            }).ToList();
         }
 
-        public async Task<BlogPost> UpdateBlogPostAsync(BlogPost blogPost)
+        public async Task<BlogPost> UpdateBlogPostAsync(BlogPostDTO blogPostDTO)
         {
+            var blogPost = blogPostDTO.ToEntity();
             return await _blogPostRepository.UpdateBlogPostAsync(blogPost);
         }
 
-        public async Task<IEnumerable<Tag>> GetBlogPostTagsAsync(Guid blogPostId)
+        public async Task<IEnumerable<TagDTO>> GetBlogPostTagsAsync(Guid blogPostId)
         {
-            return await _blogPostRepository.GetBlogPostTagsAsync(blogPostId);
+            var blogPostsTags = await _blogPostRepository.GetBlogPostTagsAsync(blogPostId);
+            return blogPostsTags.Select(bpt => 
+            {
+                return bpt.ToDTO();
+            }).ToList();
         }
 
-        public async Task AddBlogPostTagsAsync(IEnumerable<BlogPostTag> blogPostTags)
+        public async Task AddBlogPostTagsAsync(IEnumerable<BlogPostTagDTO> blogPostTagsDTO)
         {
-            _blogPostRepository.AddBlogPostTags(blogPostTags);
-            await _blogPostRepository.SaveChangesAsync();
+            var blogPostTags = blogPostTagsDTO.Select(bpt => 
+            {
+                return bpt.ToEntity();
+            }).ToList();
+            await _blogPostRepository.AddBlogPostTags(blogPostTags);
         }
 
-        public async Task RemoveBlogPostTagsAsync(IEnumerable<BlogPostTag> blogPostTags)
+        public async Task RemoveBlogPostTagsAsync(IEnumerable<BlogPostTagDTO> blogPostTagsDTO)
         {
-            _blogPostRepository.RemoveBlogPostTags(blogPostTags);
-            await _blogPostRepository.SaveChangesAsync();
+            var blogPostTags = blogPostTagsDTO.Select(bpt => 
+            {
+                return bpt.ToEntity();
+            }).ToList();
+            await _blogPostRepository.RemoveBlogPostTags(blogPostTags);
         }
 
         public async Task<bool> BlogPostExists(Guid id)
@@ -63,19 +75,5 @@ namespace BusinessLogic.Services
             var blogPost = await _blogPostRepository.GetBlogPostByIdAsync(id);
             return blogPost != null;
         }
-
-		public Task<IEnumerable<BlogPost>> GetApprovedBlogPostsAsync()
-		{
-			return _blogPostRepository.GetApprovedBlogPostsAsync();
-		}
-
-		public Task<IEnumerable<BlogPost>> GetPendingBlogPostsAsync()
-		{
-            return _blogPostRepository.GetPendingBlogPostsAsync();
-		}
-        Task IBlogPostService.SaveChangesAsync()
-		{
-			return _blogPostRepository.SaveChangesAsync();
-		}
 	}
 }

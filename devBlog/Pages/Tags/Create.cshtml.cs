@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DataAccess.Entities;
 using BusinessLogic.Interfaces;
-
+using BusinessLogic.DTOs;
 namespace devBlog.Pages.Tags
 {
 	public class CreateModel : PageModel
@@ -20,7 +19,7 @@ namespace devBlog.Pages.Tags
         }
 
         [BindProperty]
-        public Tag Tag { get; set; } = default!;
+        public TagDTO Tag { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

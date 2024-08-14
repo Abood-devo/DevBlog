@@ -2,36 +2,37 @@
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
+using BusinessLogic.Extensions;
+using BusinessLogic.DTOs;
 
 namespace BusinessLogic.Services
 {
-	public class TagService : ITagService
+	public class TagService(ITagRepository tagRepository) : ITagService
 	{
-		private readonly ITagRepository _tagRepository;
+		private readonly ITagRepository _tagRepository = tagRepository;
 
-		public TagService(ITagRepository tagRepository)
+        public async Task<Tag> CreateTagAsync(TagDTO tagDTO)
 		{
-			_tagRepository = tagRepository;
-		}
-
-		public async Task<Tag> CreateTagAsync(Tag tag)
-		{
+			var tag = tagDTO.ToEntity();
 			return await _tagRepository.CreateTagAsync(tag);
 		}
 
-		public async Task<Tag> DeleteTagAsync(Guid tagId)
+		public async Task<TagDTO> DeleteTagAsync(Guid tagId)
 		{
-			return await _tagRepository.DeleteTagAsync(tagId);
+			var tag = await _tagRepository.GetTagByIdAsync(tagId);
+			return tag.ToDTO();
 		}
 
-		public async Task<IEnumerable<Tag>> GetAllTagsAsync()
+		public async Task<IEnumerable<TagDTO>> GetAllTagsAsync()
 		{
-			return await _tagRepository.GetAllTagsAsync();
+			var tags = await _tagRepository.GetAllTagsAsync();
+			return tags.Select(t => t.ToDTO()).ToList();
 		}
 
-		public async Task<Tag> GetTagByIdAsync(Guid tagId)
+		public async Task<TagDTO> GetTagByIdAsync(Guid tagId)
 		{
-			return await _tagRepository.GetTagByIdAsync(tagId);
+			var tag = await _tagRepository.GetTagByIdAsync(tagId);
+			return tag.ToDTO();
 		}
 
 		public async Task<bool> TagExists(Guid id)
@@ -40,8 +41,9 @@ namespace BusinessLogic.Services
 			return tag != null;
 		}
 
-		public async Task<Tag> UpdateTagAsync(Tag tag)
+		public async Task<Tag> UpdateTagAsync(TagDTO tagDTO)
 		{
+			var tag = tagDTO.ToEntity();
 			return await _tagRepository.UpdateTagAsync(tag);
 		}
 	}

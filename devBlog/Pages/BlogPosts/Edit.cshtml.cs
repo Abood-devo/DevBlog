@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BusinessLogic.Interfaces;
+using BusinessLogic.DTOs;
 
 
 namespace devBlog.Pages.BlogPosts
@@ -17,12 +17,12 @@ namespace devBlog.Pages.BlogPosts
 		private readonly UserManager<IdentityUser> _userManager = userManager;
 
 		[BindProperty]
-        public BlogPost BlogPost { get; set; } = default!;
+        public BlogPostDTO BlogPost { get; set; } = default!;
 
         [BindProperty]
         public List<Guid> SelectedTagIds { get; set; } = [];
 
-        public List<Tag> Tags { get; set; } = [];
+        public List<TagDTO> Tags { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -66,20 +66,9 @@ namespace devBlog.Pages.BlogPosts
                 Tags = (await _tagService.GetAllTagsAsync()).ToList();
                 return Page();
             }
-            var user = _userManager.GetUserId(User);
-
-            if (user == null)
-            {
-                return Challenge();
-            }
-
-            BlogPost.AuthorID = Guid.Parse(user);
-            BlogPost.LastModifiedDate = DateTime.Now;
-
             // Handle the tags
             var existingTags = await _blogPostService.GetBlogPostTagsAsync(BlogPost.BlogPostID);
-
-            var newTags = SelectedTagIds.Select(tagId => new BlogPostTag
+            var newTags = SelectedTagIds.Select(tagId => new BlogPostTagDTO
             {
                 BlogPostID = BlogPost.BlogPostID,
                 TagID = tagId
@@ -88,7 +77,7 @@ namespace devBlog.Pages.BlogPosts
             // Determine tags to remove and add
             var tagsToRemove = existingTags
                 .Where(et => !SelectedTagIds.Contains(et.TagID))
-                .Select(et => new BlogPostTag
+                .Select(et => new BlogPostTagDTO
                 {
                     BlogPostID = BlogPost.BlogPostID,
                     TagID = et.TagID

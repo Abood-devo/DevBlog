@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using BusinessLogic.Interfaces;
+using BusinessLogic.DTOs;
 
 namespace devBlog.Pages.BlogPosts
 {
@@ -13,8 +13,8 @@ namespace devBlog.Pages.BlogPosts
         private readonly IBlogPostService _blogPostService = blogPostService;
         private readonly UserManager<IdentityUser> _userManager = userManager;
 
-		public BlogPost BlogPost { get; set; } = default!;
-		public IEnumerable<Tag> Tags { get; set; } = default!;
+		public BlogPostDTO BlogPost { get; set; } = default!;
+		public IEnumerable<TagDTO> Tags { get; set; } = default!;
 		public Guid CurrentUserId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -25,7 +25,7 @@ namespace devBlog.Pages.BlogPosts
             }
 
 			var blogpost = await _blogPostService.GetBlogPostByIdAsync(id.Value);
-            var blogposttags = await _blogPostService.GetBlogPostTagsAsync(id.Value);
+            var blogpostTags = await _blogPostService.GetBlogPostTagsAsync(id.Value);
 
             if (blogpost == null)
             {
@@ -34,7 +34,7 @@ namespace devBlog.Pages.BlogPosts
             else
             {
                 BlogPost = blogpost;
-                Tags = blogposttags;
+                Tags = blogpostTags;
 
                 var userId = _userManager.GetUserId(User);
 				if (userId != null)
